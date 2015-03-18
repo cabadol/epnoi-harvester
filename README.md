@@ -9,13 +9,9 @@ We use [Camel](http://camel.apache.org) to set our harvesting workflows. All the
 
 For instance, you can define the following route:
 ```groovy
-from("rss:http://rss.slashdot.org/Slashdot/slashdot?" +
-                "splitEntries=true&consumer.initialDelay=1000&consumer.delay=2000" +
-                "&feedHeader=false&filter=true").marshal().rss().
-                setProperty(SOURCE_NAME, constant("slashdot")).
-                setProperty(SOURCE_URL,  constant("http://rss.slashdot.org/Slashdot/slashdot")).
+from("file:"+basedir+"/rss?recursive=true&include=.*\\.xml&doneFileName=\${file:name}.done").
                 to("direct:setCommonRssXpathExpressions").
-                to("direct:retrieveByHttpAndSave")
+                to("seda:notifyUIA")
 ```
 
 ## Common Routes
@@ -23,21 +19,48 @@ from("rss:http://rss.slashdot.org/Slashdot/slashdot?" +
 As you have seen before, exist some routes that are used but are not defined in `routes.groovy`. They contain common actions and can be used from any other new route.
 
 ### direct:setCommonRssXpathExpressions
-```groovy
-from("direct:setCommonRssXpathExpressions").
-                setProperty(SOURCE_PROTOCOL,            constant("rss")).
-                setProperty(SOURCE_URI,                 simple("http://www.epnoi.org/rss/${property."+SOURCE_NAME+"}")).
-                setProperty(PUBLICATION_TITLE,          xpath("//rss:item/rss:title/text()", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_DESCRIPTION,    xpath("//rss:item/rss:description/text()", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_PUBLISHED,      xpath("//rss:item/dc:date/text()", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_URI,            xpath("//rss:item/rss:link/text()", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_URL,            xpath("//rss:item/rss:link/text()", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_LANGUAGE,       xpath("//rss:channel/dc:language/text()", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_RIGHTS,         xpath("//rss:channel/dc:rights/text()", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_CREATORS,       xpath("string-join(//rss:channel/dc:creator/text(),\";\")", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_FORMAT,         constant("htm")).
-                setProperty(PUBLICATION_METADATA_FORMAT,constant("xml"));
-```
+   ```groovy
+   from("direct:setCommonRssXpathExpressions").
+                   setProperty(SOURCE_PROTOCOL, constant("rss")).
+                   setProperty(SOURCE_URI,                 simple("http://www.epnoi.org/rss/${property." + SOURCE_NAME + "}")).
+                   setProperty(SOURCE_NAME,                xpath("//rss:channel/rss:title/text()", String.class).namespaces(ns)).
+                   setProperty(SOURCE_URL,                 xpath("//rss:channel/rss:link/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_TITLE,          xpath("//rss:item/rss:title/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_DESCRIPTION,    xpath("//rss:item/rss:description/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_PUBLISHED,      xpath("//rss:item/dc:date/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_URI,            xpath("//rss:item/rss:link/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_URL,            xpath("//rss:item/rss:link/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_URL_LOCAL,      simple("${header.CamelFileAbsolutePath}")).
+                   setProperty(PUBLICATION_LANGUAGE,       xpath("//rss:channel/dc:language/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_RIGHTS,         xpath("//rss:channel/dc:rights/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_CREATORS,       xpath("string-join(//rss:channel/dc:creator/text(),\";\")", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_FORMAT,         constant("htm")).
+                   setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
+                   setProperty(PUBLICATION_REFERENCE_URL,  simple("${header.CamelFileAbsolutePath}"));
+   ```
+
+### direct:setCommonOAIPMHXpathExpressions
+   ```groovy
+   from("direct:setCommonOaipmhXpathExpressions").
+                   setProperty(SOURCE_PROTOCOL,            constant("oaipmh")).
+                   setProperty(SOURCE_URI,                 simple("http://www.epnoi.org/oaipmh/${property." + SOURCE_NAME + "}")).
+                   setProperty(SOURCE_NAME,                xpath("substring-before(substring-after(//oai:request/text(),\"http://\"),\"/\")", String.class).namespaces(ns)).
+                   setProperty(SOURCE_URL,                 xpath("//oai:request/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_TITLE,          xpath("//oai:metadata/oai:dc/dc:title/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_DESCRIPTION,    xpath("//oai:metadata/oai:dc/dc:description/text()",String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_PUBLISHED,      xpath("//oai:header/oai:datestamp/text()",String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_URI,            xpath("//oai:header/oai:identifier/text()",String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_URL,            xpath("//oai:metadata/oai:dc/dc:identifier/text()",String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_URL_LOCAL,      simple("${header.CamelFileAbsolutePath}")).
+                   setProperty(PUBLICATION_LANGUAGE,       xpath("//oai:metadata/oai:dc/dc:language/text()",String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_RIGHTS,         xpath("//oai:metadata/oai:dc/dc:rights/text()", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_CREATORS,       xpath("string-join(//oai:metadata/oai:dc/dc:creator/text(),\";\")", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_FORMAT,         xpath("substring-after(//oai:metadata/oai:dc/dc:format/text(),\"/\")", String.class).namespaces(ns)).
+                   setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
+                   setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
+                   setProperty(PUBLICATION_REFERENCE_URL, simple("${header.CamelFileAbsolutePath}"));
+   ```
+
 
 ## Publication Info
 Because each server can provide information differently, we need to know how these attributes are assigned:
@@ -71,6 +94,6 @@ Download the binary distribution:
 
 | Version | Link |
 | :------- |:-----|
-| 1.0.0    | [tar.gz](http://github.com/cabadol/epnoi-harvester/raw/mvn-repo/es/upm/oeg/epnoi/epnoi-harvester/1.0.0/epnoi-harvester-1.0.0.tar.gz)|
+| 1.0.1    | [tar.gz](http://github.com/cabadol/epnoi-harvester/raw/mvn-repo/es/upm/oeg/epnoi/epnoi-harvester/1.0.1/epnoi-harvester-1.0.1.tar.gz)|
 
 This work is funded by the EC-funded project DrInventor ([www.drinventor.eu](www.drinventor.eu)).

@@ -6,7 +6,7 @@
 
     <groupId>es.upm.oeg.epnoi</groupId>
     <artifactId>epnoi-harvester</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <app.name>eharvester</app.name>
@@ -258,11 +258,11 @@
             <version>${springboot.version}</version>
         </dependency>
         <!-- Adds remote ssh shell support -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-remote-shell</artifactId>
-            <version>${springboot.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-remote-shell</artifactId>-->
+            <!--<version>${springboot.version}</version>-->
+        <!--</dependency>-->
         <!-- Import Spring Boot’s default logging framework (Logback) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
