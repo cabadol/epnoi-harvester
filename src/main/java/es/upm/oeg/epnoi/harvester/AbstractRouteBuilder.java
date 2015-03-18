@@ -107,7 +107,7 @@ public abstract class AbstractRouteBuilder extends RouteBuilder {
                 setProperty(PUBLICATION_CREATORS,       xpath("string-join(//rss:channel/dc:creator/text(),\";\")", String.class).namespaces(ns)).
                 setProperty(PUBLICATION_FORMAT,         constant("htm")).
                 setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
-                setProperty(PUBLICATION_REFERENCE_URL,  simple("${header.CamelFileAbsolutePath}"));
+                setProperty(PUBLICATION_REFERENCE_URL,  simple("${header.CamelFileParent}/.camel/${header.CamelFileNameOnly}"));
 
         /*********************************************************************************************************************************
          * -> Set Common OAI-PMH Xpath Expressions
@@ -129,7 +129,7 @@ public abstract class AbstractRouteBuilder extends RouteBuilder {
                 setProperty(PUBLICATION_FORMAT,         xpath("substring-after(//oai:metadata/oai:dc/dc:format/text(),\"/\")", String.class).namespaces(ns)).
                 setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
                 setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
-                setProperty(PUBLICATION_REFERENCE_URL, simple("${header.CamelFileAbsolutePath}"));
+                setProperty(PUBLICATION_REFERENCE_URL,  simple("${header.CamelFileParent}/.camel/${header.CamelFileNameOnly}"));
 
 
 
