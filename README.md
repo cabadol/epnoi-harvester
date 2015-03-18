@@ -94,6 +94,6 @@ Download the binary distribution:
 
 | Version | Link |
 | :------- |:-----|
-| 1.0.1    | [tar.gz](http://github.com/cabadol/epnoi-harvester/raw/mvn-repo/es/upm/oeg/epnoi/epnoi-harvester/1.0.1/epnoi-harvester-1.0.1.tar.gz)|
+| 1.0.2    | [tar.gz](http://github.com/cabadol/epnoi-harvester/raw/mvn-repo/es/upm/oeg/epnoi/epnoi-harvester/1.0.2/epnoi-harvester-1.0.2.tar.gz)|
 
 This work is funded by the EC-funded project DrInventor ([www.drinventor.eu](www.drinventor.eu)).
