@@ -2,8 +2,6 @@ package es.upm.oeg.epnoi.harvester;
 
 import com.google.common.base.Joiner;
 import es.upm.oeg.epnoi.harvester.processor.*;
-import org.apache.camel.Exchange;
-import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.xml.Namespaces;
 import org.slf4j.Logger;
@@ -14,9 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-public abstract class AbstractRouteBuilder extends RouteBuilder {
+public abstract class HarvesterRouteBuilder extends RouteBuilder {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(AbstractRouteBuilder.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(HarvesterRouteBuilder.class);
 
     private static Joiner joiner                                = Joiner.on(".");
     private static final String EPNOI                           = "epnoi";

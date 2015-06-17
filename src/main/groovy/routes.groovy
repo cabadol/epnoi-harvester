@@ -1,9 +1,9 @@
-import es.upm.oeg.epnoi.harvester.AbstractRouteBuilder
+import es.upm.oeg.epnoi.harvester.HarvesterRouteBuilder
 import org.apache.camel.LoggingLevel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class routes extends AbstractRouteBuilder{
+class routes extends HarvesterRouteBuilder{
 
     protected static final Logger LOG = LoggerFactory.getLogger(routes.class);
 

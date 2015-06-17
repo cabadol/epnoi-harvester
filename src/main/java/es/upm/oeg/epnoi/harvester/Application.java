@@ -39,7 +39,7 @@ public class Application {
         Main main = new Main();
         main.enableHangupSupport();
         main.setApplicationContext((AbstractApplicationContext) context);
-        main.addRouteBuilder(context.getBean(AbstractRouteBuilder.class));
+        main.addRouteBuilder(context.getBean(HarvesterRouteBuilder.class));
         main.run();
 
     }
@@ -49,7 +49,7 @@ public class Application {
         // Loading groovy class
         GroovyClassLoader gcl = new GroovyClassLoader();
         Class clazz = gcl.parseClass(groovyFile);
-        return (AbstractRouteBuilder) clazz.newInstance();
+        return (HarvesterRouteBuilder) clazz.newInstance();
     }
 
 
