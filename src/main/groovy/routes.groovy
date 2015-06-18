@@ -1,15 +1,14 @@
-import es.upm.oeg.epnoi.harvester.HarvesterRouteBuilder
+import es.upm.oeg.epnoi.harvester.BaseRouteBuilder
 import org.apache.camel.LoggingLevel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class routes extends HarvesterRouteBuilder{
+class routes extends BaseRouteBuilder {
 
     protected static final Logger LOG = LoggerFactory.getLogger(routes.class);
 
     @Override
     public void configure() throws Exception {
-        super.configure()
 
         /*********************************************************************************************************************************
          * ROUTE 1: RSS

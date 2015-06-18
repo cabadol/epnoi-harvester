@@ -8,11 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-public abstract class HarvesterRouteBuilder extends RouteBuilder {
+@Component
+public class HarvesterRouteBuilder extends RouteBuilder {
 
     protected static final Logger LOG = LoggerFactory.getLogger(HarvesterRouteBuilder.class);
 
@@ -61,15 +63,6 @@ public abstract class HarvesterRouteBuilder extends RouteBuilder {
     @Autowired
     protected ErrorHandler errorHandler;
 
-    @Autowired
-    protected UIAContextGenerator contextGenerator;
-
-    @Value("${storage.path}")
-    protected String basedir;
-
-    @Value("${uia.service.host}")
-    protected String uiaServers;
-
     protected Namespaces ns = new Namespaces("oai", "http://www.openarchives.org/OAI/2.0/")
         .add("dc", "http://purl.org/dc/elements/1.1/")
         .add("provenance", "http://www.openarchives.org/OAI/2.0/provenance")
@@ -90,7 +83,7 @@ public abstract class HarvesterRouteBuilder extends RouteBuilder {
          * -> Set Common Rss Xpath Expressions
          *********************************************************************************************************************************/
         from("direct:setCommonRssXpathExpressions").
-                setProperty(SOURCE_PROTOCOL, constant("rss")).
+                setProperty(SOURCE_PROTOCOL,            constant("rss")).
                 setProperty(SOURCE_URI,                 simple("http://www.epnoi.org/rss/${property." + SOURCE_NAME + "}")).
                 setProperty(SOURCE_NAME,                xpath("//rss:channel/rss:title/text()", String.class).namespaces(ns)).
                 setProperty(SOURCE_URL,                 xpath("//rss:channel/rss:link/text()", String.class).namespaces(ns)).
