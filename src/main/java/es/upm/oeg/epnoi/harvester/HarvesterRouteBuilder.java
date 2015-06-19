@@ -117,7 +117,7 @@ public class HarvesterRouteBuilder extends RouteBuilder {
                 setProperty(PUBLICATION_LANGUAGE,       xpath("//oai:metadata/oai:dc/dc:language/text()",String.class).namespaces(ns)).
                 setProperty(PUBLICATION_RIGHTS,         xpath("//oai:metadata/oai:dc/dc:rights/text()", String.class).namespaces(ns)).
                 setProperty(PUBLICATION_CREATORS,       xpath("string-join(//oai:metadata/oai:dc/dc:creator/text(),\";\")", String.class).namespaces(ns)).
-                setProperty(PUBLICATION_FORMAT,         xpath("substring-after(//oai:metadata/oai:dc/dc:format/text(),\"/\")", String.class).namespaces(ns)).
+                setProperty(PUBLICATION_FORMAT,         xpath("substring-after(//oai:metadata/oai:dc/dc:format[1]/text(),\"/\")", String.class).namespaces(ns)).
                 setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
                 setProperty(PUBLICATION_METADATA_FORMAT,constant("xml")).
                 setProperty(PUBLICATION_REFERENCE_URL,  simple("${header.CamelFileParent}/.camel/${header.CamelFileNameOnly}"));

@@ -13,7 +13,7 @@ class routes extends BaseRouteBuilder {
         /*********************************************************************************************************************************
          * ROUTE 1: RSS
          *********************************************************************************************************************************/
-        from("file:"+basedir+"/rss?recursive=true&include=.*\\.xml&doneFileName=\${file:name}.done").
+        from("file:"+inputDir+"/rss?recursive=true&include=.*\\.xml&doneFileName=\${file:name}.done").
                 to("direct:setCommonRssXpathExpressions").
                 to("seda:notifyUIA")
 
@@ -21,7 +21,7 @@ class routes extends BaseRouteBuilder {
         /*********************************************************************************************************************************
          * ROUTE 2: OAIPMH
          *********************************************************************************************************************************/
-        from("file:"+basedir+"/oaipmh?recursive=true&include=.*\\.xml&doneFileName=\${file:name}.done").
+        from("file:"+inputDir+"/oaipmh?recursive=true&include=.*\\.xml&doneFileName=\${file:name}.done").
                 to("direct:setCommonOaipmhXpathExpressions").
                 to("seda:notifyUIA")
 
@@ -30,10 +30,9 @@ class routes extends BaseRouteBuilder {
          * -> To UIA
          *********************************************************************************************************************************/
         from("seda:notifyUIA").
-                process(contextGenerator).
+                process(roBuilder).
                 log(LoggingLevel.INFO,LOG,"File Read: '\${header.CamelFileName}'").
-                //to("euia:out?servers="+ uiaServers)
-                to("stream:out")
+                to("file:"+outputDir+"?fileName=\${header.FileName}")
 
     }
 

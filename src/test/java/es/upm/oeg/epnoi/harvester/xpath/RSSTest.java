@@ -91,13 +91,13 @@ public class RSSTest extends CamelTestSupport{
                         .add("dc", "http://purl.org/dc/elements/1.1/")
                         .add("provenance", "http://www.openarchives.org/OAI/2.0/provenance")
                         .add("oai_dc", "http://www.openarchives.org/OAI/2.0/oai_dc/")
-                        .add("rss","http://purl.org/rss/1.0/");
+                        .add("publications/rss","http://purl.org/rss/1.0/");
 
                 from("direct:start").
                         setHeader(HarvesterRouteBuilder.SOURCE_NAME,                   constant("slashdot")).
                         setHeader(HarvesterRouteBuilder.SOURCE_URI,                    constant("http://www.epnoi.org/feeds/slashdot")).
                         setHeader(HarvesterRouteBuilder.SOURCE_URL,                    constant("http://rss.slashdot.org/Slashdot/slashdot")).
-                        setHeader(HarvesterRouteBuilder.SOURCE_PROTOCOL,               constant("rss")).
+                        setHeader(HarvesterRouteBuilder.SOURCE_PROTOCOL,               constant("publications/rss")).
                         setHeader(HarvesterRouteBuilder.PUBLICATION_TITLE,             xpath("//rss:item/rss:title/text()", String.class).namespaces(ns)).
                         setHeader(HarvesterRouteBuilder.PUBLICATION_DESCRIPTION,       xpath("//rss:item/rss:description/text()", String.class).namespaces(ns)).
                         setHeader(HarvesterRouteBuilder.PUBLICATION_PUBLISHED,         xpath("//rss:item/dc:date/text()", String.class).namespaces(ns)).

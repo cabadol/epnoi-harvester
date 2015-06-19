@@ -28,8 +28,8 @@ public class Application {
     File groovyFile;
 
 
-    @Autowired
-    RouteBuilder routeBuilder;
+//    @Autowired
+//    RouteBuilder routeBuilder;
 
     public static void main(String[] args) throws Exception {
         // Initialize Spring Context
@@ -53,12 +53,12 @@ public class Application {
     }
 
 
-    @Bean
-    public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
-        SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
-        camelContext.addRoutes(routeBuilder);
-        return camelContext;
-    }
+//    @Bean
+//    public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
+//        SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
+//        camelContext.addRoutes(routeBuilder);
+//        return camelContext;
+//    }
 
 
 

@@ -6,18 +6,21 @@
 
     <groupId>es.upm.oeg.epnoi</groupId>
     <artifactId>epnoi-harvester</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
 
     <properties>
         <app.name>eharvester</app.name>
         <assemble.directory>target/generated-resources/appassembler/jsw/${app.name}</assemble.directory>
         <!-- Library Versions -->
-        <camel.version>2.14.1</camel.version>
+        <camel.version>2.15.2</camel.version>
+        <commons-lang.version>2.6</commons-lang.version>
         <euia.version>1.0.0</euia.version>
         <java.version>1.8</java.version>
         <jetty.version>9.1.4.v20140401</jetty.version>
+        <jsoup.version>1.8.2</jsoup.version>
         <guava.version>18.0</guava.version>
         <lombok.version>1.16.2</lombok.version>
+        <lucene.version>3.6.0</lucene.version>
         <mavenappassembler.version>1.9</mavenappassembler.version>
         <mavenassembly.version>2.5.3</mavenassembly.version>
         <mavendeploy.version>2.8.1</mavendeploy.version>
@@ -25,6 +28,7 @@
         <mavendependency.version>2.5.1</mavendependency.version>
         <mavensource.version>2.4</mavensource.version>
         <oaipmh.version>1.0.4</oaipmh.version>
+        <pdfbox.version>1.8.9</pdfbox.version>
         <spring.version>4.1.4.RELEASE</spring.version>
         <springboot.version>1.2.1.RELEASE</springboot.version>
         <tika.version>0.10</tika.version>
@@ -238,38 +242,24 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <!-- Camel Testing -->
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test</artifactId>
-            <version>${camel.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- Support for the “Advanced Message Queuing Protocol” via spring-rabbit -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-            <version>${springboot.version}</version>
-        </dependency>
         <!-- Adds production ready features such as metrics and monitoring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
             <version>${springboot.version}</version>
         </dependency>
-        <!-- Adds remote ssh shell support -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-remote-shell</artifactId>-->
-            <!--<version>${springboot.version}</version>-->
-        <!--</dependency>-->
-        <!-- Import Spring Boot’s default logging framework (Logback) -->
+        <!-- Spring Boot’s default logging framework (Logback) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
             <version>${springboot.version}</version>
         </dependency>
         <!-- Apache Camel context -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-boot</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
@@ -303,6 +293,43 @@
             <artifactId>camel-stream</artifactId>
             <version>${camel.version}</version>
         </dependency>
+        <!-- Apache Camel OAI-PMH Component -->
+        <dependency>
+            <groupId>es.upm.oeg.camel</groupId>
+            <artifactId>camel-oaipmh</artifactId>
+            <version>${oaipmh.version}</version>
+        </dependency>
+        <!-- Apache Camel Epnoi UIA Component -->
+        <dependency>
+            <groupId>es.upm.oeg.camel</groupId>
+            <artifactId>camel-euia</artifactId>
+            <version>${euia.version}</version>
+        </dependency>
+        <!-- Apache Camel Saxon for XPath 2.0 -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-saxon</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <!-- Apache Camel Testing -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-spring</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-testng</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!-- Parse RSS Content -->
         <dependency>
             <groupId>org.apache.tika</groupId>
@@ -316,24 +343,12 @@
             <version>${tika.version}</version>
             <classifier>jdk14</classifier>
         </dependency>
-        <!-- Sugared annotations -->
+        <!-- Smart Annotations -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <!-- Camel OAI-PMH Component -->
-        <dependency>
-            <groupId>es.upm.oeg.camel</groupId>
-            <artifactId>camel-oaipmh</artifactId>
-            <version>${oaipmh.version}</version>
-        </dependency>
-        <!-- Camel Epnoi UIA Component -->
-        <dependency>
-            <groupId>es.upm.oeg.camel</groupId>
-            <artifactId>camel-euia</artifactId>
-            <version>${euia.version}</version>
         </dependency>
         <!-- Google Guava Library -->
         <dependency>
@@ -341,18 +356,42 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        <!-- Jetty Embedded Server -->
+        <!--&lt;!&ndash; Jetty Embedded Server &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jetty</groupId>-->
+            <!--<artifactId>jetty-server</artifactId>-->
+            <!--<version>${jetty.version}</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <!-- Lucene Core -->
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
-            <scope>test</scope>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
         </dependency>
-        <!-- Camel Saxon for XPath 2.0 -->
+        <!-- Lucene Analyzer -->
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-saxon</artifactId>
-            <version>${camel.version}</version>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <!-- JSoup Extractor: For lucene classifier -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+        <!-- Apache Commons Lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commons-lang.version}</version>
+        </dependency>
+        <!-- Apache PDF Box -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>${pdfbox.version}</version>
         </dependency>
     </dependencies>
     <distributionManagement>
