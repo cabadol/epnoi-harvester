@@ -6,7 +6,7 @@
 
     <groupId>es.upm.oeg.epnoi</groupId>
     <artifactId>epnoi-harvester</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 
     <properties>
         <app.name>eharvester</app.name>
@@ -215,7 +215,7 @@
                     <includes><include>**/*</include></includes>
                     <merge>true</merge>
                     <repositoryName>epnoi-harvester</repositoryName>
-                    <repositoryOwner>cabadol</repositoryOwner>
+                    <repositoryOwner>cbadenes</repositoryOwner>
                     <server>github</server>
                 </configuration>
                 <executions>
@@ -292,12 +292,6 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream</artifactId>
             <version>${camel.version}</version>
-        </dependency>
-        <!-- Apache Camel OAI-PMH Component -->
-        <dependency>
-            <groupId>es.upm.oeg.camel</groupId>
-            <artifactId>camel-oaipmh</artifactId>
-            <version>${oaipmh.version}</version>
         </dependency>
         <!-- Apache Camel Epnoi UIA Component -->
         <dependency>
@@ -402,19 +396,10 @@
         </repository>
     </distributionManagement>
     <repositories>
-        <!-- GitHub Camel-OAIPMH Repository -->
-        <repository>
-            <id>camel-oaipmh-mvn-repo</id>
-            <url>https://raw.github.com/cabadol/camel-oaipmh/mvn-repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
         <!-- GitHub Camel-EUIA Repository -->
         <repository>
             <id>camel-euia-mvn-repo</id>
-            <url>https://raw.github.com/cabadol/camel-euia/mvn-repo/</url>
+            <url>https://raw.github.com/cbadenes/camel-euia/mvn-repo/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
